@@ -40,7 +40,7 @@ exports.convert = (document, format, filter, callback) => {
         tempDir: callback => temp.mkdir('libreofficeConvert', callback),
         saveSource: ['tempDir', (results, callback) => fs.writeFile(path.join(results.tempDir, 'source'), document, callback)],
         convert: ['soffice', 'saveSource', (results, callback) => {
-            let command = `${results.soffice} --headless --convert-to ${format}`;
+            let command = `${results.soffice} --headless --writer --convert-to ${format}`;
             if (filter !== undefined) {
                 command += `:"${filter}"`;
             }
