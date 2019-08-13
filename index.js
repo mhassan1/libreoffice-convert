@@ -6,7 +6,7 @@ const path = require('path');
 const async = require('async');
 const { exec } = require('child_process');
 
-exports.convert = (document, format, filter, callback) => {
+exports.convert = (document, format, sourceExt, filter, callback) => {
     return async.auto({
         soffice: (callback) => {
             let paths = [];
@@ -38,13 +38,13 @@ exports.convert = (document, format, filter, callback) => {
             );
         },
         tempDir: callback => temp.mkdir('libreofficeConvert', callback),
-        saveSource: ['tempDir', (results, callback) => fs.writeFile(path.join(results.tempDir, 'source'), document, callback)],
+        saveSource: ['tempDir', (results, callback) => fs.writeFile(path.join(results.tempDir, `source.${sourceExt}`), document, callback)],
         convert: ['soffice', 'saveSource', (results, callback) => {
             let command = `${results.soffice} --headless --writer --convert-to ${format}`;
             if (filter !== undefined) {
                 command += `:"${filter}"`;
             }
-            command += ` --outdir ${results.tempDir} ${path.join(results.tempDir, 'source')}`;
+            command += ` --outdir ${results.tempDir} ${path.join(results.tempDir, `source.${sourceExt}`)}`;
 
             return exec(command, callback);
         }],
