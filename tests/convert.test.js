@@ -16,7 +16,8 @@ describe('convert', () => {
     }
 
     it('should convert a word document to text',  (done) => {
+        jest.setTimeout(10000)
         const docx = _fs.readFileSync(_path.join(__dirname, '/resources/hello.docx'));
-        convert(docx, 'txt', undefined, expectHello(done));
+        convert(docx, 'txt', undefined, undefined, expectHello(done));
     });
 });
