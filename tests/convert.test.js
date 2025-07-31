@@ -2,7 +2,8 @@ var _jest = require('jest'),
     _fs = require('fs'),
     _path = require('path'),
     { exec } = require('child_process'),
-    convert = require('../index').convert;
+    convert = require('../index').convert
+    convertWithOptions = require('../index').convertWithOptions;
 
 describe('convert', () => {
     function expectHello(done) {
@@ -19,6 +20,12 @@ describe('convert', () => {
     it('should convert a word document to text',  (done) => {
         const docx = _fs.readFileSync(_path.join(__dirname, '/resources/hello.docx'));
         convert(docx, 'txt', undefined, expectHello(done));
+    });
+
+
+    it('should convert a word document to text with options', (done) => {
+        const docx = _fs.readFileSync(_path.join(__dirname, '/resources/hello.docx'));
+        convertWithOptions(docx, 'txt', undefined, { fileName: 'hello.docx' }, expectHello(done));
     });
 
 
