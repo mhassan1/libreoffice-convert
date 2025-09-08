@@ -61,7 +61,12 @@ const convertWithOptions = (document, format, filter, options, callback) => {
             args.push(tempDir.name);
             args.push(path.join(tempDir.name, fileName));
           
-            return execFile(results.soffice, args, execOptions, callback);
+            return execFile(results.soffice, args, execOptions, (err, stdout, stderr) => {
+                // warnings might also be emitted to stderr
+                if (stderr && stderr.toLowerCase().includes('error'))
+                    callback(new Error('Error calling soffice: ' + stderr));
+                else callback(err, stdout, stderr);
+            });
         }],
         loadDestination: ['convert', (results, callback) =>
             async.retry({
