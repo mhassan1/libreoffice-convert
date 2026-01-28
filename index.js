@@ -72,7 +72,7 @@ const convertWithOptions = (document, format, filter, options, callback) => {
             async.retry({
                 times: asyncOptions.times || 3,
                 interval: asyncOptions.interval || 200
-            }, (callback) => fs.readFile(path.join(tempDir.name, `${fileName}.${format.split(":")[0]}`), callback), callback)
+            }, (callback) => fs.readFile(path.join(tempDir.name, `${fileName.slice(0, fileName.length - path.extname(fileName).length)}.${format.split(":")[0]}`), callback), callback)
         ]
     }).then( (res) => {
         return callback(null, res.loadDestination);
